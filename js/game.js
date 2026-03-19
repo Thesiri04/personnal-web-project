@@ -2,20 +2,69 @@
 const canvas = document.getElementById('gameCanvas');
 const ctx = canvas.getContext('2d');
 const box = 20; // Size of each square in the grid
-let score = 0;
 
-// Snake initial position
-let snake = [];
-snake[0] = { x: 9 * box, y: 10 * box };
-
-// Food initial position
-let food = {
-    x: Math.floor(Math.random() * 23 + 1) * box,
-    y: Math.floor(Math.random() * 15 + 1) * box
-};
-
-// Snake direction
+// Game state variables
+let snake;
+let food;
+let score;
 let d;
+let game;
+let speed;
+
+// Buttons
+const easyBtn = document.getElementById('easyBtn');
+const mediumBtn = document.getElementById('mediumBtn');
+const hardBtn = document.getElementById('hardBtn');
+const restartBtn = document.getElementById('restartBtn');
+const gameControls = document.getElementById('game-controls');
+
+// Initial message on canvas
+function showInitialMessage() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.fillStyle = "black";
+    ctx.font = "24px Arial";
+    ctx.textAlign = "center";
+    ctx.fillText("Select a difficulty to start", canvas.width / 2, canvas.height / 2);
+    ctx.textAlign = "left"; // Reset alignment
+}
+
+// Initialize and start the game
+function startGame(selectedSpeed) {
+    speed = selectedSpeed;
+    // Hide difficulty buttons
+    gameControls.style.display = 'none';
+
+    // Reset game state
+    snake = [];
+    snake[0] = { x: 9 * box, y: 10 * box };
+
+    food = {
+        x: Math.floor(Math.random() * (canvas.width / box - 1)) * box,
+        y: Math.floor(Math.random() * (canvas.height / box - 1)) * box
+    };
+
+    score = 0;
+    d = undefined; // Reset direction
+
+    // Start the game loop
+    if (game) clearInterval(game); // Clear any existing game loop
+    game = setInterval(draw, speed);
+}
+
+// Event listeners for difficulty buttons
+easyBtn.addEventListener('click', () => startGame(200));
+mediumBtn.addEventListener('click', () => startGame(150));
+hardBtn.addEventListener('click', () => startGame(100));
+
+// Event listener for restart button
+restartBtn.addEventListener('click', resetGame);
+
+function resetGame() {
+    clearInterval(game);
+    restartBtn.style.display = 'none';
+    gameControls.style.display = 'block';
+    showInitialMessage();
+}
 
 document.addEventListener("keydown", direction);
 
@@ -71,13 +120,15 @@ function draw() {
     if (snakeX == food.x && snakeY == food.y) {
         score++;
         food = {
-            x: Math.floor(Math.random() * 23 + 1) * box,
-            y: Math.floor(Math.random() * 15 + 1) * box
+            x: Math.floor(Math.random() * (canvas.width / box - 1)) * box,
+            y: Math.floor(Math.random() * (canvas.height / box - 1)) * box
         }
         // we don't remove the tail
     } else {
         // remove the tail
-        snake.pop();
+        if(snake.length) {
+           snake.pop();
+        }
     }
 
     // new Head
@@ -91,7 +142,11 @@ function draw() {
         clearInterval(game);
         ctx.fillStyle = "black";
         ctx.font = "45px Changa one";
-        ctx.fillText("Game Over", canvas.width / 2 - 100, canvas.height / 2);
+        ctx.textAlign = "center";
+        ctx.fillText("Game Over", canvas.width / 2, canvas.height / 2);
+        ctx.textAlign = "left"; // Reset alignment
+        restartBtn.style.display = 'block'; // Show restart button
+        return; // Stop the draw function
     }
 
     snake.unshift(newHead);
@@ -101,5 +156,6 @@ function draw() {
     ctx.fillText("Score: " + score, 10, 25);
 }
 
-// call draw function every 100 ms
-let game = setInterval(draw, 100);
+// Show the initial message when the page loads
+showInitialMessage();
+
