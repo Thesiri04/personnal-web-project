@@ -18,17 +18,43 @@
         </nav>
     </header>
 
-    <main>
-        <section>
-            <h2>Simple Game</h2>
-            <p>Area for inserting games written with JavaScript</p>
-            <div id="game-controls">
-                <button id="easyBtn">Easy</button>
-                <button id="mediumBtn">Medium</button>
-                <button id="hardBtn">Hard</button>
+    <main class="game-page-main">
+        <section class="game-container">
+            <div class="game-header">
+                <h2>🎮 Simple Web Game</h2>
+                <p>Enjoy this custom interactive game built with JavaScript.</p>
             </div>
-            <canvas id="gameCanvas" width="480" height="320"></canvas>
-            <button id="restartBtn" style="display: none;">Restart Game</button>
+            
+            <div class="game-dashboard">
+                <div id="game-controls" class="difficulty-controls">
+                    <p class="control-label">Select Difficulty:</p>
+                    <div class="button-group">
+                        <button id="easyBtn" class="game-btn easy">Easy</button>
+                        <button id="mediumBtn" class="game-btn medium active">Medium</button>
+                        <button id="hardBtn" class="game-btn hard">Hard</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="canvas-wrapper" id="canvasWrapper">
+                <button id="fullscreenBtn" class="fullscreen-btn" title="Fullscreen/Close">⛶</button>
+                <canvas id="gameCanvas" width="480" height="320"></canvas>
+                
+                <!-- Game Over Overlay -->
+                <div id="gameOverOverlay" class="game-over-overlay" style="display: none;">
+                    <h3>GAME OVER</h3>
+                    <p>Score: <span id="finalScore">0</span></p>
+                    <button id="overlayRestartBtn" class="game-btn restart">
+                        <span class="icon">🔄</span> Play Again
+                    </button>
+                </div>
+            </div>
+            
+            <div class="action-controls">
+                <button id="restartBtn" class="game-btn restart" style="display: none;">
+                    <span class="icon">🔄</span> Restart Game
+                </button>
+            </div>
         </section>
     </main>
 

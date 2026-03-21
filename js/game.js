@@ -21,7 +21,8 @@ const gameControls = document.getElementById('game-controls');
 // Initial message on canvas
 function showInitialMessage() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-    ctx.fillStyle = "black";
+    // Draw background color (optional, since canvas is black via css, we can just write text)
+    ctx.fillStyle = "white"; // Changed text to white so it's visible
     ctx.font = "24px Arial";
     ctx.textAlign = "center";
     ctx.fillText("Select a difficulty to start", canvas.width / 2, canvas.height / 2);
@@ -57,10 +58,13 @@ mediumBtn.addEventListener('click', () => startGame(150));
 hardBtn.addEventListener('click', () => startGame(100));
 
 // Event listener for restart button
+const overlayRestartBtn = document.getElementById('overlayRestartBtn');
 restartBtn.addEventListener('click', resetGame);
+overlayRestartBtn.addEventListener('click', resetGame);
 
 function resetGame() {
     clearInterval(game);
+    document.getElementById('gameOverOverlay').style.display = 'none';
     restartBtn.style.display = 'none';
     gameControls.style.display = 'block';
     showInitialMessage();
@@ -70,6 +74,12 @@ document.addEventListener("keydown", direction);
 
 function direction(event) {
     let key = event.keyCode;
+    
+    // Prevent default scrolling behavior for arrow keys
+    if ([37, 38, 39, 40].includes(key)) {
+        event.preventDefault();
+    }
+
     if (key == 37 && d != "RIGHT") {
         d = "LEFT";
     } else if (key == 38 && d != "DOWN") {
@@ -140,22 +150,49 @@ function draw() {
     // game over
     if (snakeX < 0 || snakeX >= canvas.width || snakeY < 0 || snakeY >= canvas.height || collision(newHead, snake)) {
         clearInterval(game);
-        ctx.fillStyle = "black";
-        ctx.font = "45px Changa one";
-        ctx.textAlign = "center";
-        ctx.fillText("Game Over", canvas.width / 2, canvas.height / 2);
-        ctx.textAlign = "left"; // Reset alignment
-        restartBtn.style.display = 'block'; // Show restart button
+        
+        // Show Overlay
+        document.getElementById('finalScore').innerText = score;
+        document.getElementById('gameOverOverlay').style.display = 'flex';
+        
         return; // Stop the draw function
     }
 
     snake.unshift(newHead);
 
-    ctx.fillStyle = "black";
-    ctx.font = "25px Arial";
+    // Draw Score
+    ctx.fillStyle = "white"; // Changed from black to white to show on black canvas
+    ctx.font = "20px Arial";
     ctx.fillText("Score: " + score, 10, 25);
 }
 
 // Show the initial message when the page loads
 showInitialMessage();
+
+
+
+// Fullscreen Pop-up Logic
+const fullscreenBtn = document.getElementById("fullscreenBtn");
+const canvasWrapper = document.getElementById("canvasWrapper");
+
+fullscreenBtn.addEventListener("click", () => {
+    canvasWrapper.classList.toggle("fullscreen-mode");
+    document.body.classList.toggle("game-fullscreen-active");
+    
+    // Change icon based on state
+    if (canvasWrapper.classList.contains("fullscreen-mode")) {
+        fullscreenBtn.innerHTML = "?"; // Close icon
+    } else {
+        fullscreenBtn.innerHTML = "?"; // Fullscreen icon
+    }
+});
+
+// Allow escaping fullscreen with ESC key
+document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape" && canvasWrapper.classList.contains("fullscreen-mode")) {
+        canvasWrapper.classList.remove("fullscreen-mode");
+        document.body.classList.remove("game-fullscreen-active");
+        fullscreenBtn.innerHTML = "?";
+    }
+});
 
