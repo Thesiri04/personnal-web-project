@@ -1,9 +1,9 @@
-// Game constants
+// ค่าคงที่ของเกม
 const canvas = document.getElementById('gameCanvas');
 const ctx = canvas.getContext('2d');
-const box = 20; // Size of each square in the grid
+const box = 20; // ขนาดของแต่ละช่องในตาราง
 
-// Game state variables
+// ตัวแปรสถานะของเกม
 let snake;
 let food;
 let score;
@@ -11,7 +11,7 @@ let d;
 let game;
 let speed;
 
-// Buttons
+// ปุ่มควบคุม
 const easyBtn = document.getElementById('easyBtn');
 const mediumBtn = document.getElementById('mediumBtn');
 const hardBtn = document.getElementById('hardBtn');
@@ -19,32 +19,32 @@ const restartBtn = document.getElementById('restartBtn');
 const gameControls = document.getElementById('game-controls');
 const gameOverOverlay = document.getElementById('gameOverOverlay');
 
-// Initial message on canvas
+// ข้อความเริ่มต้นบน canvas
 function showInitialMessage() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-    // Draw background color
-    ctx.fillStyle = "white"; // Changed text to white so it's visible
+    // กำหนดสีข้อความ
+    ctx.fillStyle = "white"; // ใช้สีขาวเพื่อให้อ่านได้ชัดเจน
     
-    // Title
+    // หัวข้อหลัก
     ctx.font = "bold 24px Arial";
     ctx.textAlign = "center";
     ctx.fillText("Select a difficulty to start", canvas.width / 2, canvas.height / 2 - 20);
     
-    // Sub-instruction
+    // ข้อความแนะนำย่อย
     ctx.font = "16px Arial";
     ctx.fillStyle = "lightgreen";
     ctx.fillText("Use Arrow Keys or Swipe to control the snake! ", canvas.width / 2, canvas.height / 2 + 15);
     
-    ctx.textAlign = "left"; // Reset alignment
+    ctx.textAlign = "left"; // รีเซ็ตการจัดแนวกลับเป็นค่าเริ่มต้น
 }
 
-// Initialize and start the game
+// เริ่มต้นและสตาร์ตเกม
 function startGame(selectedSpeed) {
     speed = selectedSpeed;
-    // Hide difficulty buttons
+    // ซ่อนปุ่มเลือกระดับความยาก
     gameControls.style.display = 'none';
 
-    // Reset game state
+    // รีเซ็ตสถานะเกม
     snake = [];
     snake[0] = { x: 9 * box, y: 10 * box };
 
@@ -54,19 +54,19 @@ function startGame(selectedSpeed) {
     };
 
     score = 0;
-    d = undefined; // Reset direction
+    d = undefined; // รีเซ็ตทิศทาง
 
-    // Start the game loop
-    if (game) clearInterval(game); // Clear any existing game loop
+    // เริ่มลูปเกม
+    if (game) clearInterval(game); // ล้างลูปเกมเดิม (ถ้ามี)
     game = setInterval(draw, speed);
 }
 
-// Event listeners for difficulty buttons
+// ตัวดักอีเวนต์สำหรับปุ่มเลือกระดับความยาก
 easyBtn.addEventListener('click', () => startGame(200));
 mediumBtn.addEventListener('click', () => startGame(150));
 hardBtn.addEventListener('click', () => startGame(100));
 
-// Event listener for restart button
+// ตัวดักอีเวนต์สำหรับปุ่มรีสตาร์ต
 const overlayRestartBtn = document.getElementById('overlayRestartBtn');
 restartBtn.addEventListener('click', resetGame);
 overlayRestartBtn.addEventListener('click', resetGame);
@@ -84,7 +84,7 @@ document.addEventListener("keydown", direction);
 function direction(event) {
     const key = event.key;
     
-    // Prevent default scrolling behavior for arrow keys
+    // ป้องกันการเลื่อนหน้าจอเมื่อกดปุ่มลูกศร
     if (["ArrowLeft", "ArrowUp", "ArrowRight", "ArrowDown"].includes(key)) {
         event.preventDefault();
     }
@@ -100,7 +100,7 @@ function direction(event) {
     }
 }
 
-// Check collision function
+// ฟังก์ชันตรวจการชน
 function collision(head, array) {
     for (let i = 0; i < array.length; i++) {
         if (head.x == array[i].x && head.y == array[i].y) {
@@ -110,7 +110,7 @@ function collision(head, array) {
     return false;
 }
 
-// Draw everything to the canvas
+// วาดทุกอย่างลงบน canvas
 function draw() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
@@ -125,63 +125,63 @@ function draw() {
     ctx.fillStyle = "red";
     ctx.fillRect(food.x, food.y, box, box);
 
-    // old head position
+    // ตำแหน่งหัวงูก่อนขยับ
     let snakeX = snake[0].x;
     let snakeY = snake[0].y;
 
-    // which direction
+    // คำนวณตำแหน่งใหม่ตามทิศทาง
     if (d == "LEFT") snakeX -= box;
     if (d == "UP") snakeY -= box;
     if (d == "RIGHT") snakeX += box;
     if (d == "DOWN") snakeY += box;
 
-    // if the snake eats the food
+    // ถ้างูกินอาหารได้
     if (snakeX == food.x && snakeY == food.y) {
         score++;
         food = {
             x: Math.floor(Math.random() * (canvas.width / box - 1)) * box,
             y: Math.floor(Math.random() * (canvas.height / box - 1)) * box
         }
-        // we don't remove the tail
+        // ไม่ต้องลบหางเพื่อให้งูยาวขึ้น
     } else {
-        // remove the tail
+        // ลบหาง 1 ช่องเพื่อให้ความยาวคงเดิม
         if(snake.length) {
            snake.pop();
         }
     }
 
-    // new Head
+    // สร้างหัวงูตำแหน่งใหม่
     let newHead = {
         x: snakeX,
         y: snakeY
     }
 
-    // game over
+    // เงื่อนไขเกมจบ
     if (snakeX < 0 || snakeX >= canvas.width || snakeY < 0 || snakeY >= canvas.height || collision(newHead, snake)) {
         clearInterval(game);
         
-        // Show Overlay
+        // แสดงเลเยอร์เกมจบ
         document.getElementById('finalScore').innerText = score;
         gameOverOverlay.classList.remove('is-hidden');
         restartBtn.classList.remove('is-hidden');
         
-        return; // Stop the draw function
+        return; // หยุดฟังก์ชันวาดทันที
     }
 
     snake.unshift(newHead);
 
-    // Draw Score
-    ctx.fillStyle = "white"; // Changed from black to white to show on black canvas
+    // วาดคะแนน
+    ctx.fillStyle = "white"; // ใช้สีขาวเพื่อให้เห็นบนพื้นหลังสีดำ
     ctx.font = "20px Arial";
     ctx.fillText("Score: " + score, 10, 25);
 }
 
-// Show the initial message when the page loads
+// แสดงข้อความเริ่มต้นเมื่อโหลดหน้า
 showInitialMessage();
 
 
 
-// Fullscreen Pop-up Logic
+// ตรรกะการเปิด/ปิดโหมดเต็มจอ
 const fullscreenBtn = document.getElementById("fullscreenBtn");
 const canvasWrapper = document.getElementById("canvasWrapper");
 const originalCanvasWidth = canvas.width;
@@ -191,11 +191,11 @@ function applyFullscreenCanvasSize() {
     const isMobileView = window.matchMedia("(max-width: 768px)").matches;
 
     if (isMobileView) {
-        // Portrait game area for phones/tablets similar to mobile snake layouts
+        // ตั้งพื้นที่เกมแนวตั้งสำหรับมือถือ/แท็บเล็ต
         canvas.width = 320;
         canvas.height = 480;
     } else {
-        // Keep classic landscape canvas on larger screens
+        // ใช้ขนาดแนวนอนเดิมบนหน้าจอใหญ่
         canvas.width = originalCanvasWidth;
         canvas.height = originalCanvasHeight;
     }
@@ -239,7 +239,7 @@ fullscreenBtn.addEventListener("click", () => {
     }
 });
 
-// Allow escaping fullscreen with ESC key
+// อนุญาตให้ออกจากโหมดเต็มจอด้วยปุ่ม ESC
 document.addEventListener("keydown", (e) => {
     if (e.key === "Escape" && canvasWrapper.classList.contains("fullscreen-mode")) {
         exitFullscreenMode();
@@ -253,14 +253,14 @@ window.addEventListener("resize", () => {
     }
 });
 
-// --- Mobile / Touch Controls ---
+// --- การควบคุมบนมือถือ / สัมผัส ---
 const dBtnUP = document.getElementById("dBtnUP");
 const dBtnDOWN = document.getElementById("dBtnDOWN");
 const dBtnLEFT = document.getElementById("dBtnLEFT");
 const dBtnRIGHT = document.getElementById("dBtnRIGHT");
 
 function preventDefaultTap(e) {
-    e.preventDefault(); // Prevent double tap zoom / scrolling
+    e.preventDefault(); // ป้องกันการซูมจากการแตะซ้ำและการเลื่อนหน้าจอ
 }
 
 if (dBtnUP) dBtnUP.addEventListener('pointerdown', (e) => { preventDefaultTap(e); if (d != "DOWN") d = "UP"; });
@@ -268,23 +268,23 @@ if (dBtnDOWN) dBtnDOWN.addEventListener('pointerdown', (e) => { preventDefaultTa
 if (dBtnLEFT) dBtnLEFT.addEventListener('pointerdown', (e) => { preventDefaultTap(e); if (d != "RIGHT") d = "LEFT"; });
 if (dBtnRIGHT) dBtnRIGHT.addEventListener('pointerdown', (e) => { preventDefaultTap(e); if (d != "LEFT") d = "RIGHT"; });
 
-// Swipe Detection on Canvas
+// ตรวจจับการปัดบน canvas
 let touchStartX = 0;
 let touchStartY = 0;
-let touchThreshold = 30; // Minimum distance to register a swipe
-let swipeHandled = false; // Prevent multiple swipe triggers in one continuous slide
+let touchThreshold = 30; // ระยะขั้นต่ำที่นับว่าเป็นการปัด
+let swipeHandled = false; // ป้องกันการปัดซ้ำหลายครั้งในการแตะต่อเนื่อง
 
 canvas.addEventListener('touchstart', function(e) {
     touchStartX = e.touches[0].clientX;
     touchStartY = e.touches[0].clientY;
-    swipeHandled = false; // Reset for new touch
+    swipeHandled = false; // รีเซ็ตทุกครั้งเมื่อเริ่มสัมผัสใหม่
     e.preventDefault(); 
 }, { passive: false });
 
 canvas.addEventListener('touchmove', function(e) {
-    e.preventDefault(); // Prevent scrolling while swiping
+    e.preventDefault(); // ป้องกันการเลื่อนหน้าจอระหว่างปัด
     
-    if (!game || swipeHandled) return; // Only check if game is running and we haven't already handled this swipe
+    if (!game || swipeHandled) return; // ตรวจเฉพาะตอนเกมกำลังรันและยังไม่เคยรับการปัดครั้งนี้
 
     let currentX = e.touches[0].clientX;
     let currentY = e.touches[0].clientY;
@@ -292,25 +292,25 @@ canvas.addEventListener('touchmove', function(e) {
     let diffX = currentX - touchStartX;
     let diffY = currentY - touchStartY;
 
-    // Check if movement is significant enough
+    // ตรวจว่าระยะการเคลื่อนที่มากพอที่จะนับเป็นการปัดหรือไม่
     if (Math.abs(diffX) > touchThreshold || Math.abs(diffY) > touchThreshold) {
         if (Math.abs(diffX) > Math.abs(diffY)) {
-            // Horizontal swipe
+            // ปัดแนวนอน
             if (diffX > 0 && d != "LEFT") d = "RIGHT";
             else if (diffX < 0 && d != "RIGHT") d = "LEFT";
         } else {
-            // Vertical swipe
+            // ปัดแนวตั้ง
             if (diffY > 0 && d != "UP") d = "DOWN";
             else if (diffY < 0 && d != "DOWN") d = "UP";
         }
         
-        // Once registered, lock out further changes until finger is lifted
+        // เมื่อตรวจจับแล้ว ให้ล็อกไม่รับซ้ำจนกว่าจะยกนิ้ว
         swipeHandled = true; 
     }
 }, { passive: false });
 
 canvas.addEventListener('touchend', function(e) {
-    // We already handle it in touchmove for snappier response, just cleanly end it
+    // การควบคุมหลักจัดการใน touchmove แล้ว ตรงนี้ปิดจบการสัมผัสให้เรียบร้อย
     e.preventDefault();
 }, { passive: false });
 

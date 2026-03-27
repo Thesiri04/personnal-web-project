@@ -1,4 +1,4 @@
-/* General/Shared Styles */
+/* สไตล์ทั่วไปที่ใช้ร่วมกัน */
 @import url('https://fonts.googleapis.com/css2?family=Sarabun:wght@400;700&display=fallback');
 
 :root {
@@ -30,14 +30,14 @@ body {
 }
 
 header {
-    background: #1a1a2e; /* Dark cohesive background */
+    background: #1a1a2e; /* พื้นหลังโทนเข้มให้ภาพรวมกลมกลืน */
     padding: 1rem 5%;
     display: flex;
     justify-content: space-between;
     align-items: center;
     position: sticky;
     top: 0;
-    z-index: 1000; /* Keeps header on top */
+    z-index: 1000; /* ให้ส่วนหัวแสดงอยู่ชั้นบนสุด */
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
 }
 
@@ -92,7 +92,7 @@ nav a:hover::after {
 }
 
 main {
-    flex: 1; /* Make main content take up available space */
+    flex: 1; /* ให้เนื้อหาหลักกินพื้นที่ว่างที่เหลือ */
     padding: 0;
     text-align: center;
 }
@@ -126,12 +126,12 @@ footer p {
     text-align: center;
 }
 
-/* Game Page Specific Styles */
+/* สไตล์เฉพาะหน้าเกม */
 #gameCanvas {
     background: #fff;
     border: 1px solid #ccc;
     box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-    max-width: 100%; /* Make canvas responsive */
+    max-width: 100%; /* ให้ canvas ปรับตามขนาดหน้าจอ */
     height: auto;
 }
 
@@ -161,14 +161,14 @@ button:hover {
 }
 
 #restartBtn {
-    background-color: #f44336; /* Red for restart */
+    background-color: #f44336; /* ใช้สีแดงสำหรับปุ่มรีสตาร์ต */
 }
 
 #restartBtn:hover {
     background-color: #da190b;
 }
 
-/* Responsive Design */
+/* การออกแบบแบบตอบสนอง (Responsive) */
 @media (max-width: 768px) {
     header {
         flex-direction: column;
@@ -187,14 +187,14 @@ button:hover {
     }
 }
 
-/* Game Page Specific Styles */
+/* สไตล์เฉพาะหน้าเกม */
 #gameCanvas {
     display: block;
     margin: 20px auto;
     background: #bebebe;
 }
 
-/* CV / Resume Page Specific Styles */
+/* สไตล์เฉพาะหน้า CV / Resume */
 .cv-container {
     max-width: 1000px;
     margin: 2rem auto;
@@ -352,20 +352,20 @@ button:hover {
     transition: width 1.5s cubic-bezier(0.1, 0.5, 0.1, 1);
 }
 
-/* ตั้งค่าให้แสดง Hover Effect เฉพาะบนหน้าจอ Desktop (มากกว่า 768px ขึ้นไป) */
+/* ตั้งค่าเอฟเฟกต์ hover ให้ทำงานเฉพาะหน้าจอเดสก์ท็อป (ตั้งแต่ 768px ขึ้นไป) */
 @media(min-width: 768px) {
     .skill-progress {
         width: 0;
     }
 
-    /* Trigger animation on hover over skills container */
+    /* เริ่มแอนิเมชันเมื่อชี้เมาส์เหนือกล่องทักษะ */
     .skills-container:hover .skill-progress[data-width] {
         width: var(--width);
     }
 }
 
 
-/* Home Page Specific Styles */
+/* สไตล์เฉพาะหน้าแรก */
 .hero-section {
     background: linear-gradient(135deg, var(--primary-color) 0%, #1a1a2e 100%);
     color: var(--light-text);
@@ -445,7 +445,7 @@ button:hover {
     box-shadow: 0 6px 12px rgba(0,0,0,0.3);
 }
 
-/* Highlights Section */
+/* ส่วนไฮไลต์ */
 .highlights-section {
     padding: 5rem 20px;
     background: var(--secondary-color);
@@ -504,7 +504,7 @@ button:hover {
 }
 
 
-/* Game Page Specific Styles (Modern UI) */
+/* สไตล์เฉพาะหน้าเกม (Modern UI) */
 .game-page-main {
     background: var(--secondary-color);
     padding: 3rem 20px;
@@ -579,7 +579,7 @@ button:hover {
     box-shadow: 0 6px 12px rgba(0,0,0,0.1);
 }
 
-/* Difficulty specific styles */
+/* สไตล์เฉพาะระดับความยาก */
 .game-btn.easy { border-color: #28a745; color: #28a745; }
 .game-btn.easy:hover, .game-btn.easy.active { background: #28a745; color: white; }
 
@@ -590,7 +590,7 @@ button:hover {
 .game-btn.hard:hover, .game-btn.hard.active { background: #dc3545; color: white; }
 
 .canvas-wrapper {
-    background: #1a1a2e; /* Dark background to make game pop */
+    background: #1a1a2e; /* พื้นหลังเข้มเพื่อให้ตัวเกมเด่นขึ้น */
     padding: 15px;
     border-radius: 12px;
     box-shadow: inset 0 4px 10px rgba(0,0,0,0.2);
@@ -601,7 +601,7 @@ button:hover {
 
 #gameCanvas {
     display: block;
-    background: #000; /* Assuming standard arcade game black bg */
+    background: #000; /* พื้นหลังดำตามสไตล์เกมอาร์เคด */
     border-radius: 8px;
     margin: 0 auto;
     box-shadow: 0 0 15px rgba(76, 175, 80, 0.3);
@@ -649,7 +649,7 @@ button:hover {
 }
 
 
-/* Fullscreen Game UI */
+/* ส่วนติดต่อผู้ใช้โหมดเต็มจอของเกม */
 .canvas-wrapper {
     position: relative;
     transition: all 0.3s ease;
@@ -675,17 +675,17 @@ button:hover {
 }
 
 body.game-fullscreen-active {
-    overflow: hidden; /* Prevent background scrolling */
+    overflow: hidden; /* ป้องกันการเลื่อนพื้นหลัง */
 }
 
-/* The overlay background */
+/* พื้นหลังของเลเยอร์ทับ */
 .canvas-wrapper.fullscreen-mode {
     position: fixed;
     top: 0;
     left: 0;
     width: 100vw;
     height: 100vh;
-    background: rgba(0, 0, 0, 0.85); /* Dark opaque background */
+    background: rgba(0, 0, 0, 0.85); /* พื้นหลังทึบโทนเข้ม */
     z-index: 10000;
     display: flex;
     justify-content: center;
@@ -700,7 +700,7 @@ body.game-fullscreen-active {
     width: min(92vw, 900px);
     height: auto;
     max-height: 84vh;
-    box-shadow: 0 0 30px rgba(76, 175, 80, 0.8); /* Glowing effect */
+    box-shadow: 0 0 30px rgba(76, 175, 80, 0.8); /* เอฟเฟกต์เรืองแสง */
 }
 
 .canvas-wrapper.fullscreen-mode .fullscreen-btn {
@@ -718,7 +718,7 @@ body.game-fullscreen-active {
 }
 
 
-/* Game Over Overlay */
+/* เลเยอร์แสดงผลเมื่อเกมจบ */
 .game-over-overlay {
     position: absolute;
     top: 0;
