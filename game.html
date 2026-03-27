@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Game</title>
     
-    <!-- เชื่อมต่อ Google Fonts ล่วงหน้าเพื่อลดเวลาโหลด -->
+    <!-- Preconnect to Google Fonts for faster loading | เตรียมการเชื่อมต่อ Google Fonts เพื่อลดเวลาโหลด -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     
@@ -26,8 +26,8 @@
     <main class="game-page-main">
         <section class="game-container">
             <div class="game-header">
-                <h2>🎮 Simple Web Game</h2>
-                <p>Enjoy this custom interactive game built with JavaScript.</p>
+                <h2>🎮 The Snake Game</h2>
+                <p>Control the snake to eat food and grow without hitting the walls or yourself!</p>
             </div>
             
             <div class="game-dashboard">
@@ -49,20 +49,26 @@
                 <button id="fullscreenBtn" class="fullscreen-btn" title="Fullscreen/Close">⛶</button>
                 <canvas id="gameCanvas" width="480" height="320"></canvas>
                 
-                <!-- เลเยอร์แสดงผลเมื่อเกมจบ -->
+                <!-- Game Over Overlay | ชั้นแสดงผลเมื่อเกมจบ -->
                 <div id="gameOverOverlay" class="game-over-overlay is-hidden">
                     <h3>GAME OVER</h3>
                     <p>Score: <span id="finalScore">0</span></p>
-                    <button id="overlayRestartBtn" class="game-btn restart">
-                        <span class="icon">🔄</span> Play Again
-                    </button>
+                    <button id="overlayRestartBtn" class="game-btn restart">Play Again</button>
+                </div>
+
+                <!-- Pause Overlay | ชั้นแสดงผลเมื่อพักเกม -->
+                <div id="pauseOverlay" class="pause-overlay is-hidden">
+                    <h3>PAUSED</h3>
+                    <p>The game is currently paused.</p>
+                    <div class="pause-actions">
+                        <button id="continueBtn" class="game-btn continue">Continue</button>
+                        <button id="endGameBtn" class="game-btn end">End Game</button>
+                    </div>
                 </div>
             </div>
 
             <div class="action-controls">
-                <button id="restartBtn" class="game-btn restart is-hidden">
-                    <span class="icon">🔄</span> Restart Game
-                </button>
+                <button id="restartBtn" class="game-btn restart is-hidden">Restart Game</button>
             </div>
         </section>
     </main>
