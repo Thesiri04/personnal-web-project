@@ -112,6 +112,20 @@ footer p {
     margin: 0;
 }
 
+.is-hidden {
+    display: none !important;
+}
+
+.noscript-note {
+    background: #fff3cd;
+    color: #856404;
+    border: 1px solid #ffeeba;
+    border-radius: 10px;
+    padding: 12px 16px;
+    margin: 0 0 1.5rem;
+    text-align: center;
+}
+
 /* Game Page Specific Styles */
 #gameCanvas {
     background: #fff;

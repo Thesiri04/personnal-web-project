@@ -17,6 +17,7 @@ const mediumBtn = document.getElementById('mediumBtn');
 const hardBtn = document.getElementById('hardBtn');
 const restartBtn = document.getElementById('restartBtn');
 const gameControls = document.getElementById('game-controls');
+const gameOverOverlay = document.getElementById('gameOverOverlay');
 
 // Initial message on canvas
 function showInitialMessage() {
@@ -31,7 +32,7 @@ function showInitialMessage() {
     
     // Sub-instruction
     ctx.font = "16px Arial";
-    ctx.fillStyle = "#lightgreen";
+    ctx.fillStyle = "lightgreen";
     ctx.fillText("Use Arrow Keys or Swipe to control the snake! ", canvas.width / 2, canvas.height / 2 + 15);
     
     ctx.textAlign = "left"; // Reset alignment
@@ -72,8 +73,8 @@ overlayRestartBtn.addEventListener('click', resetGame);
 
 function resetGame() {
     clearInterval(game);
-    document.getElementById('gameOverOverlay').style.display = 'none';
-    restartBtn.style.display = 'none';
+    gameOverOverlay.classList.add('is-hidden');
+    restartBtn.classList.add('is-hidden');
     gameControls.style.display = 'block';
     showInitialMessage();
 }
@@ -81,20 +82,20 @@ function resetGame() {
 document.addEventListener("keydown", direction);
 
 function direction(event) {
-    let key = event.keyCode;
+    const key = event.key;
     
     // Prevent default scrolling behavior for arrow keys
-    if ([37, 38, 39, 40].includes(key)) {
+    if (["ArrowLeft", "ArrowUp", "ArrowRight", "ArrowDown"].includes(key)) {
         event.preventDefault();
     }
 
-    if (key == 37 && d != "RIGHT") {
+    if (key === "ArrowLeft" && d != "RIGHT") {
         d = "LEFT";
-    } else if (key == 38 && d != "DOWN") {
+    } else if (key === "ArrowUp" && d != "DOWN") {
         d = "UP";
-    } else if (key == 39 && d != "LEFT") {
+    } else if (key === "ArrowRight" && d != "LEFT") {
         d = "RIGHT";
-    } else if (key == 40 && d != "UP") {
+    } else if (key === "ArrowDown" && d != "UP") {
         d = "DOWN";
     }
 }
@@ -161,7 +162,8 @@ function draw() {
         
         // Show Overlay
         document.getElementById('finalScore').innerText = score;
-        document.getElementById('gameOverOverlay').style.display = 'flex';
+        gameOverOverlay.classList.remove('is-hidden');
+        restartBtn.classList.remove('is-hidden');
         
         return; // Stop the draw function
     }

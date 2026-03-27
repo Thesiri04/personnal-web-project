@@ -41,12 +41,16 @@
                 </div>
             </div>
 
+            <noscript>
+                <p class="noscript-note">This game requires JavaScript. Please enable JavaScript to play.</p>
+            </noscript>
+
             <div class="canvas-wrapper" id="canvasWrapper">
                 <button id="fullscreenBtn" class="fullscreen-btn" title="Fullscreen/Close">⛶</button>
                 <canvas id="gameCanvas" width="480" height="320"></canvas>
                 
                 <!-- Game Over Overlay -->
-                <div id="gameOverOverlay" class="game-over-overlay" style="display: none;">
+                <div id="gameOverOverlay" class="game-over-overlay is-hidden">
                     <h3>GAME OVER</h3>
                     <p>Score: <span id="finalScore">0</span></p>
                     <button id="overlayRestartBtn" class="game-btn restart">
@@ -56,7 +60,7 @@
             </div>
 
             <div class="action-controls">
-                <button id="restartBtn" class="game-btn restart" style="display: none;">
+                <button id="restartBtn" class="game-btn restart is-hidden">
                     <span class="icon">🔄</span> Restart Game
                 </button>
             </div>
