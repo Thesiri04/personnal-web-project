@@ -179,6 +179,7 @@ button:hover {
     margin: 20px auto;
     background: #bebebe;
 }
+
 /* CV / Resume Page Specific Styles */
 .cv-container {
     max-width: 1000px;
@@ -682,8 +683,9 @@ body.game-fullscreen-active {
 }
 
 .canvas-wrapper.fullscreen-mode #gameCanvas {
-    transform: scale(1.5); /* Make the game visually bigger */
-    transform-origin: center;
+    width: min(92vw, 900px);
+    height: auto;
+    max-height: 84vh;
     box-shadow: 0 0 30px rgba(76, 175, 80, 0.8); /* Glowing effect */
 }
 
@@ -696,7 +698,8 @@ body.game-fullscreen-active {
 
 @media (max-width: 768px) {
     .canvas-wrapper.fullscreen-mode #gameCanvas {
-        transform: scale(1.1);
+        width: min(88vw, 420px);
+        max-height: 78vh;
     }
 }
 

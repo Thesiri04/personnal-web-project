@@ -21,11 +21,19 @@ const gameControls = document.getElementById('game-controls');
 // Initial message on canvas
 function showInitialMessage() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-    // Draw background color (optional, since canvas is black via css, we can just write text)
+    // Draw background color
     ctx.fillStyle = "white"; // Changed text to white so it's visible
-    ctx.font = "24px Arial";
+    
+    // Title
+    ctx.font = "bold 24px Arial";
     ctx.textAlign = "center";
-    ctx.fillText("Select a difficulty to start", canvas.width / 2, canvas.height / 2);
+    ctx.fillText("Select a difficulty to start", canvas.width / 2, canvas.height / 2 - 20);
+    
+    // Sub-instruction
+    ctx.font = "16px Arial";
+    ctx.fillStyle = "#lightgreen";
+    ctx.fillText("Use Arrow Keys or Swipe to control the snake! ", canvas.width / 2, canvas.height / 2 + 15);
+    
     ctx.textAlign = "left"; // Reset alignment
 }
 
@@ -174,25 +182,134 @@ showInitialMessage();
 // Fullscreen Pop-up Logic
 const fullscreenBtn = document.getElementById("fullscreenBtn");
 const canvasWrapper = document.getElementById("canvasWrapper");
+const originalCanvasWidth = canvas.width;
+const originalCanvasHeight = canvas.height;
+
+function applyFullscreenCanvasSize() {
+    const isMobileView = window.matchMedia("(max-width: 768px)").matches;
+
+    if (isMobileView) {
+        // Portrait game area for phones/tablets similar to mobile snake layouts
+        canvas.width = 320;
+        canvas.height = 480;
+    } else {
+        // Keep classic landscape canvas on larger screens
+        canvas.width = originalCanvasWidth;
+        canvas.height = originalCanvasHeight;
+    }
+}
+
+function resetCanvasSize() {
+    canvas.width = originalCanvasWidth;
+    canvas.height = originalCanvasHeight;
+}
+
+function redrawAfterCanvasResize() {
+    const gameStarted = gameControls.style.display === 'none';
+    if (gameStarted && snake && snake.length > 0) {
+        draw();
+    } else {
+        showInitialMessage();
+    }
+}
+
+function enterFullscreenMode() {
+    canvasWrapper.classList.add("fullscreen-mode");
+    document.body.classList.add("game-fullscreen-active");
+    applyFullscreenCanvasSize();
+    fullscreenBtn.innerHTML = "✖";
+    redrawAfterCanvasResize();
+}
+
+function exitFullscreenMode() {
+    canvasWrapper.classList.remove("fullscreen-mode");
+    document.body.classList.remove("game-fullscreen-active");
+    resetCanvasSize();
+    fullscreenBtn.innerHTML = "⛶";
+    redrawAfterCanvasResize();
+}
 
 fullscreenBtn.addEventListener("click", () => {
-    canvasWrapper.classList.toggle("fullscreen-mode");
-    document.body.classList.toggle("game-fullscreen-active");
-    
-    // Change icon based on state
     if (canvasWrapper.classList.contains("fullscreen-mode")) {
-        fullscreenBtn.innerHTML = "?"; // Close icon
+        exitFullscreenMode();
     } else {
-        fullscreenBtn.innerHTML = "?"; // Fullscreen icon
+        enterFullscreenMode();
     }
 });
 
 // Allow escaping fullscreen with ESC key
 document.addEventListener("keydown", (e) => {
     if (e.key === "Escape" && canvasWrapper.classList.contains("fullscreen-mode")) {
-        canvasWrapper.classList.remove("fullscreen-mode");
-        document.body.classList.remove("game-fullscreen-active");
-        fullscreenBtn.innerHTML = "?";
+        exitFullscreenMode();
     }
 });
+
+window.addEventListener("resize", () => {
+    if (canvasWrapper.classList.contains("fullscreen-mode")) {
+        applyFullscreenCanvasSize();
+        redrawAfterCanvasResize();
+    }
+});
+
+// --- Mobile / Touch Controls ---
+const dBtnUP = document.getElementById("dBtnUP");
+const dBtnDOWN = document.getElementById("dBtnDOWN");
+const dBtnLEFT = document.getElementById("dBtnLEFT");
+const dBtnRIGHT = document.getElementById("dBtnRIGHT");
+
+function preventDefaultTap(e) {
+    e.preventDefault(); // Prevent double tap zoom / scrolling
+}
+
+if (dBtnUP) dBtnUP.addEventListener('pointerdown', (e) => { preventDefaultTap(e); if (d != "DOWN") d = "UP"; });
+if (dBtnDOWN) dBtnDOWN.addEventListener('pointerdown', (e) => { preventDefaultTap(e); if (d != "UP") d = "DOWN"; });
+if (dBtnLEFT) dBtnLEFT.addEventListener('pointerdown', (e) => { preventDefaultTap(e); if (d != "RIGHT") d = "LEFT"; });
+if (dBtnRIGHT) dBtnRIGHT.addEventListener('pointerdown', (e) => { preventDefaultTap(e); if (d != "LEFT") d = "RIGHT"; });
+
+// Swipe Detection on Canvas
+let touchStartX = 0;
+let touchStartY = 0;
+let touchThreshold = 30; // Minimum distance to register a swipe
+let swipeHandled = false; // Prevent multiple swipe triggers in one continuous slide
+
+canvas.addEventListener('touchstart', function(e) {
+    touchStartX = e.touches[0].clientX;
+    touchStartY = e.touches[0].clientY;
+    swipeHandled = false; // Reset for new touch
+    e.preventDefault(); 
+}, { passive: false });
+
+canvas.addEventListener('touchmove', function(e) {
+    e.preventDefault(); // Prevent scrolling while swiping
+    
+    if (!game || swipeHandled) return; // Only check if game is running and we haven't already handled this swipe
+
+    let currentX = e.touches[0].clientX;
+    let currentY = e.touches[0].clientY;
+    
+    let diffX = currentX - touchStartX;
+    let diffY = currentY - touchStartY;
+
+    // Check if movement is significant enough
+    if (Math.abs(diffX) > touchThreshold || Math.abs(diffY) > touchThreshold) {
+        if (Math.abs(diffX) > Math.abs(diffY)) {
+            // Horizontal swipe
+            if (diffX > 0 && d != "LEFT") d = "RIGHT";
+            else if (diffX < 0 && d != "RIGHT") d = "LEFT";
+        } else {
+            // Vertical swipe
+            if (diffY > 0 && d != "UP") d = "DOWN";
+            else if (diffY < 0 && d != "DOWN") d = "UP";
+        }
+        
+        // Once registered, lock out further changes until finger is lifted
+        swipeHandled = true; 
+    }
+}, { passive: false });
+
+canvas.addEventListener('touchend', function(e) {
+    // We already handle it in touchmove for snappier response, just cleanly end it
+    e.preventDefault();
+}, { passive: false });
+
 
